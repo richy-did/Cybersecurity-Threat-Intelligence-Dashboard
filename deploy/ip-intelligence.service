@@ -1,0 +1,19 @@
+[Unit]
+Description=IP Intelligence Dashboard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=ipintel
+Group=ipintel
+WorkingDirectory=/opt/ip-intelligence
+EnvironmentFile=/etc/ip-intelligence.env
+ExecStart=/usr/bin/node /opt/ip-intelligence/server.mjs
+Restart=on-failure
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

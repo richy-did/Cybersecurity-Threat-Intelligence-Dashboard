@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Investigate suspicious IP addresses using AbuseIPDB reputation data.">
+  <title>IP Intelligence | Threat Intelligence Dashboard</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="top"><div class="shell topbar">
+    <span class="brand"><span class="mark" aria-hidden="true">IP</span> IP Intelligence</span>
+    <a href="https://www.abuseipdb.com/">Data by AbuseIPDB</a>
+  </div></header>
+  <main class="shell">
+    <section class="intro">
+      <h1>Threat Intelligence Dashboard</h1>
+      <p>Check suspicious IP addresses against community abuse reports and save evidence for incident triage.</p>
+    </section>
+    <section class="panel" aria-labelledby="lookup-title">
+      <h2 id="lookup-title">IP lookup</h2>
+      <form id="lookup">
+        <label>IP address<input id="ip" name="ip" required maxlength="45" placeholder="e.g. 8.8.8.8" autocomplete="off" spellcheck="false"></label>
+        <label>Report window<select id="days"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option></select></label>
+        <button id="submit">Check reputation</button>
+      </form>
+      <div class="lookup-footer"><small>Supports public IPv4 and IPv6 addresses.</small><button type="button" class="secondary" id="sample">Load sample</button></div>
+      <p role="status" id="status"></p>
+    </section>
+    <section class="panel" id="result" aria-labelledby="result-title" hidden>
+      <div class="section-top"><div><h2 id="result-title"></h2><p class="meta" id="result-meta"></p></div><button class="secondary" id="download">Download report</button></div>
+      <div class="score"><div><span id="risk" class="badge"></span><p><strong id="score"></strong> / 100</p></div><div class="meter"><label for="confidence">Abuse confidence</label><meter id="confidence" min="0" max="100" low="25" high="75" optimum="0"></meter></div></div>
+      <dl id="facts"></dl>
+      <p class="meta">Low 0-24, moderate 25-74, high 75-100. Use reputation alongside evidence from your own logs.</p>
+    </section>
+    <section class="panel history" aria-labelledby="history-title">
+      <div class="section-top"><div><h2 id="history-title">Investigation history</h2><p class="meta" id="history-summary" aria-live="polite"></p></div></div>
+      <div class="filters">
+        <label>Search history<input type="search" id="search" placeholder="IP, network, country or source"></label>
+        <label>Risk<select id="risk-filter"><option value="">All levels</option><option>High</option><option>Moderate</option><option>Low</option></select></label>
+        <label>Sort by<select id="sort"><option value="recent">Most recent</option><option value="score">Highest risk</option><option value="reports">Most reports</option></select></label>
+      </div>
+      <p id="empty"></p>
+      <div class="table-wrap" id="table" hidden><table><thead><tr><th scope="col">IP address</th><th scope="col">Risk</th><th scope="col">Reports</th><th scope="col">Source</th><th scope="col">Investigated</th></tr></thead><tbody id="rows"></tbody></table></div>
+    </section>
+  </main>
+  <footer class="shell">Investigation history stays in this browser.</footer>
+</body>
+</html>
