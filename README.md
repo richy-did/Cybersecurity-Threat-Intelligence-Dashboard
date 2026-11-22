@@ -2,6 +2,8 @@
 
 Investigate a suspicious public IPv4 or IPv6 address from a firewall, server, or application log. The dashboard uses AbuseIPDB's community reporting data to help an analyst decide which indicators to review first.
 
+**Deployed dashboard** · [Open via Lb01](http://3.8.170.130/)
+
 ## Run locally
 
 Install [Node.js](https://nodejs.org/) 22 or newer with npm. The application uses built-in Node.js modules and has zero package dependencies.
@@ -30,7 +32,9 @@ The latest 50 unique IP/window/source records are kept in browser storage. Live 
 
 ## Deploy on Web01 and Web02
 
-These are deployment instructions for Linux servers running systemd. Use an administrator account, Node.js 22+ at `/usr/bin/node`, and the same source revision on both nodes. The server needs outbound HTTPS access to AbuseIPDB. Allow TCP port 3000 to the app nodes from Lb01's private address.
+These are deployment instructions for Linux servers running systemd. Use an administrator account, Node.js 22+, and the same source revision on both nodes. Match the service's `ExecStart` path to the installed binary. The server needs outbound HTTPS access to AbuseIPDB. Allow TCP port 3000 to the app nodes from Lb01's private address.
+
+The assignment deployment uses Ubuntu 20.04 on both web nodes. The Node.js 22 ARM64 release was checksum-verified and its binary installed at `/usr/local/bin/node`. The deployed systemd unit uses that path.
 
 On each application server, from the project checkout:
 
@@ -68,7 +72,7 @@ Repeat the health request with the Web02 private address and confirm the instanc
 
 ## Configure Lb01
 
-Install [HAProxy](https://www.haproxy.com/) 2.4 or newer using the server package manager. Copy [deploy/haproxy.cfg](deploy/haproxy.cfg) to Lb01, replace both private-IP placeholders, and check each node's `/health` endpoint from Lb01. The template listens on port 80. For a public HTTPS endpoint configure Lb01 with a DNS hostname and a certificate for that hostname, then use the TLS bind shown in the config. Review existing listener bindings before installing the template on a shared server.
+Install [HAProxy](https://www.haproxy.com/) using the server package manager. The assignment deployment validated the configuration with Ubuntu's HAProxy 2.0.33 package. Copy [deploy/haproxy.cfg](deploy/haproxy.cfg) to Lb01, replace both private-IP placeholders, and check each node's `/health` endpoint from Lb01. The template listens on port 80. For a public HTTPS endpoint configure Lb01 with a DNS hostname and a certificate for that hostname, then use the TLS bind shown in the config. Review existing listener bindings before installing the template on a shared server.
 
 ```sh
 sudo haproxy -c -f ./haproxy.cfg
@@ -90,10 +94,14 @@ curl -fsS "$LB_URL/api/lookup?ip=8.8.8.8&days=30"
 
 To verify failover on dedicated assignment servers, stop the app on one node, give HAProxy time to detect the failed check, and repeat the requests. Confirm the other node serves them. Start the stopped service, wait for recovery, and verify both names reappear.
 
+### Deployment verification
+
+Six consecutive requests to the public [health endpoint](http://3.8.170.130/health) alternated between `web01` and `web02`. The public dashboard and its static assets returned HTTP 200. An invalid IP returned HTTP 400 with a validation message. Live lookups will return HTTP 503 until the AbuseIPDB key is provisioned on both web nodes. Sample investigations are available immediately.
+
 ## Submission and demo
 
 - GitHub repository for submission is [Cybersecurity-Threat-Intelligence-Dashboard](https://github.com/richy-did/Cybersecurity-Threat-Intelligence-Dashboard).
-- Add the public Lb01 URL and hosted demo link to this README once deployment and recording are complete.
+- Add the hosted demo link to this README after recording.
 - Provide any credentials required by the assignment using its private submission channel. Keep the API key out of source, screenshots, and video.
 
 | Time | Show |
