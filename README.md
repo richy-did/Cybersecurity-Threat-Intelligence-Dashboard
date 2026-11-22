@@ -96,7 +96,15 @@ To verify failover on dedicated assignment servers, stop the app on one node, gi
 
 ### Deployment verification
 
-Six consecutive requests to the public [health endpoint](http://3.8.170.130/health) alternated between `web01` and `web02`. The public dashboard and its static assets returned HTTP 200. An invalid IP returned HTTP 400 with a validation message. Live lookups will return HTTP 503 until the AbuseIPDB key is provisioned on both web nodes. Sample investigations are available immediately.
+| Public endpoint | Verified result |
+| --- | --- |
+| [Web01](http://35.177.83.114/) | Dashboard loaded and `/health` returned `web01`. |
+| [Web02](http://18.171.60.167/) | Dashboard loaded and `/health` returned `web02`. |
+| [Lb01](http://3.8.170.130/) | Dashboard loaded and `/health` alternated between both web servers. |
+
+Each web server has a local HAProxy listener on HTTP port 80 that forwards direct browser requests to its private application listener on port 3000. Lb01 reaches port 3000 on both servers over the private network.
+
+Six consecutive requests to the public [health endpoint](http://3.8.170.130/health) alternated between `web01` and `web02`. The public dashboard and its static assets returned HTTP 200. An invalid IP returned HTTP 400 with a validation message. After configuring the AbuseIPDB key on both web nodes, four consecutive live lookups of `8.8.8.8` through Lb01 returned AbuseIPDB data, with the `X-Served-By` header alternating between both nodes.
 
 ## Submission and demo
 
