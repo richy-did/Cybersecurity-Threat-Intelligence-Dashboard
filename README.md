@@ -109,7 +109,7 @@ Six consecutive requests to the public [health endpoint](http://3.8.170.130/heal
 ## Submission and demo
 
 - GitHub repository for submission is [Cybersecurity-Threat-Intelligence-Dashboard](https://github.com/richy-did/Cybersecurity-Threat-Intelligence-Dashboard).
-- Add the hosted demo link to this README after recording.
+- Watch the [dashboard demo on YouTube](https://youtu.be/eVIhD_AsixY).
 - Provide any credentials required by the assignment using its private submission channel. Keep the API key out of source, screenshots, and video.
 
 | Time | Show |
