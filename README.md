@@ -106,18 +106,10 @@ Each web server has a local HAProxy listener on HTTP port 80 that forwards direc
 
 Six consecutive requests to the public [health endpoint](http://3.8.170.130/health) alternated between `web01` and `web02`. The public dashboard and its static assets returned HTTP 200. An invalid IP returned HTTP 400 with a validation message. After configuring the AbuseIPDB key on both web nodes, four consecutive live lookups of `8.8.8.8` through Lb01 returned AbuseIPDB data, with the `X-Served-By` header alternating between both nodes.
 
-## Submission and demo
+## demo  video 
 
-- GitHub repository for submission is [Cybersecurity-Threat-Intelligence-Dashboard](https://github.com/richy-did/Cybersecurity-Threat-Intelligence-Dashboard).
+
 - Watch the [dashboard demo on YouTube](https://youtu.be/eVIhD_AsixY).
-- Provide any credentials required by the assignment using its private submission channel. Keep the API key out of source, screenshots, and video.
-
-| Time | Show |
-| --- | --- |
-| 0:00-0:20 | Start the app locally and explain how it helps triage a suspicious indicator. |
-| 0:20-0:50 | Run a live IP lookup, explain the score and report window, then show an invalid-IP message. |
-| 0:50-1:20 | Use history search, risk filtering, and sorting. Reopen a result and download its report. |
-| 1:20-1:50 | Open the public dashboard through Lb01. Show repeated /health requests reaching both nodes. |
 
 ## Credits
 
